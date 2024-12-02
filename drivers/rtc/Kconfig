@@ -973,6 +973,17 @@ config RTC_DRV_RX6110
 	  This driver can also be built as a module. If so the module
 	  will be called rtc-rx6110.
 
+config RTC_DRV_BL5372
+	tristate "Belling BL5372"
+	depends on RTC_I2C_AND_SPI
+	select REGMAP_SPI if SPI_MASTER
+	select REGMAP_I2C if I2C
+	help
+	  If you say yes here you will get support for the Belling BL5372.
+
+	  This driver can also be built as a module. If so the module
+	  will be called rtc-BL5372.
+
 comment "Platform RTC drivers"
 
 # this 'CMOS' RTC driver is arch dependent because it requires
@@ -1105,12 +1116,6 @@ config RTC_DRV_DS17885
 	  clock chip.
 
 	  This chip features 8kb of extended NV-SRAM.
-
-config RTC_DRV_BL5372
-	bool "BL5372"
-	help
-	  This enables support for the Belling/BL5372 real time
-	  clock chip.
 
 endchoice
 
