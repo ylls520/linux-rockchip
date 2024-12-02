@@ -77,7 +77,7 @@ static unsigned rs5c_hr2reg(unsigned hour)
 static int bl5372_get_datetime(struct i2c_client *client, struct rtc_time *tm)
 {
     int err = 0;
-    struct bl5372 *bl5372 = i2c_get_clientdata(client);
+    // struct bl5372 *bl5372 = i2c_get_clientdata(client);
     unsigned char buf[7] = { RS5C_ADDR(RS5C372_REG_SECS) };
 
     struct i2c_msg msgs[] = {
@@ -125,17 +125,9 @@ EXIT_PROC:
 /* caller holds rtc->ops_lock */
 static int bl5372_set_datetime(struct i2c_client *client, struct rtc_time *tm)
 {
-    struct bl5372 *bl5372 = i2c_get_clientdata(client);
+    // struct bl5372 *bl5372 = i2c_get_clientdata(client);
     int err = 0;
     unsigned char buf[7];
-
-    dev_dbg(&(client->dev), "%s secs=%d, mins=%d, "
-        "hours=%d, mday=%d, mon=%d, year=%d, wday=%d\n",
-        "write", tm->tm_sec, tm->tm_min,
-        tm->tm_hour, tm->tm_mday,
-        tm->tm_mon, tm->tm_year, tm->tm_wday);
-
-    buf[0] = RS5C_ADDR(RS5C_REG_CTRL2);
     struct i2c_msg msgs2[] = {
         {/* setup read  */
             .addr = client->addr,
@@ -149,6 +141,15 @@ static int bl5372_set_datetime(struct i2c_client *client, struct rtc_time *tm)
             .buf = buf
         },
     };
+
+    dev_dbg(&(client->dev), "%s secs=%d, mins=%d, "
+        "hours=%d, mday=%d, mon=%d, year=%d, wday=%d\n",
+        "write", tm->tm_sec, tm->tm_min,
+        tm->tm_hour, tm->tm_mday,
+        tm->tm_mon, tm->tm_year, tm->tm_wday);
+
+    buf[0] = RS5C_ADDR(RS5C_REG_CTRL2);
+
     /* read registers */
     err = i2c_transfer(client->adapter, msgs2, 2);
     if (err != 2) {
@@ -293,6 +294,8 @@ EXIT_PROC:
     return err_out;
 }
 
+#define RTC_WKALM_SET_DIRECTLY 1  // 如果没有定义，手动定义一个值
+
 /* caller holds rtc->ops_lock */
 static int bl5372_rtc_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
 {
@@ -331,21 +334,21 @@ static int bl5372_rtc_set_time(struct device *dev, struct rtc_time *tm)
 /* caller holds rtc->ops_lock */
 static int bl5372_rtc_getalarm(struct device *dev, struct rtc_wkalrm *wkalrm)
 {
-    struct bl5372 *bl5372 = i2c_get_clientdata(to_i2c_client(dev));
+    // struct bl5372 *bl5372 = i2c_get_clientdata(to_i2c_client(dev));
     return 0;
 }
 
 /* caller holds rtc->ops_lock */
 static int bl5372_rtc_setalarm(struct device *dev, struct rtc_wkalrm *wkalrm)
 {
-    struct bl5372 *bl5372 = i2c_get_clientdata(to_i2c_client(dev));
+    // struct bl5372 *bl5372 = i2c_get_clientdata(to_i2c_client(dev));
     return 0;
 }
 
 /* caller holds rtc->ops_lock */
 static int bl5372_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
 {
-    struct bl5372 *bl5372 = i2c_get_clientdata(to_i2c_client(dev));
+    // struct bl5372 *bl5372 = i2c_get_clientdata(to_i2c_client(dev));
 
     return 0;
 }
@@ -536,7 +539,7 @@ EXIT_PROC:
     return err_ret;
 }
 
-static int bl5372_remove(struct i2c_client *client)
+static void bl5372_remove(struct i2c_client *client)
 {
     int err_ret;
     struct bl5372 *bl5372 = i2c_get_clientdata(client);
@@ -552,8 +555,6 @@ static int bl5372_remove(struct i2c_client *client)
     if(0 != err_ret)
     {
     }
-
-    return 0;
 }
 
 static const struct i2c_device_id bl5372_id[] = {
