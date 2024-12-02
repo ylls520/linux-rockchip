@@ -1106,6 +1106,12 @@ config RTC_DRV_DS17885
 
 	  This chip features 8kb of extended NV-SRAM.
 
+config RTC_DRV_BL5372
+	bool "BL5372"
+	help
+	  This enables support for the Belling/BL5372 real time
+	  clock chip.
+
 endchoice
 
 config RTC_DRV_DS1742
