@@ -690,27 +690,27 @@ static int it6621_check_dev(struct it6621_priv *priv)
 
 	regmap_bulk_read(priv->regmap, IT6621_REG_VENDOR_ID_LOW, &val, 2);
 	priv->vid = le16_to_cpu(val);
-	if (priv->vid != IT6621_VENDOR_ID) {
-		dev_err(priv->dev, "invalid vendor id %x\n", priv->vid);
-		return -ENODEV;
-	}
+	// if (priv->vid != IT6621_VENDOR_ID) {
+		dev_err(priv->dev, "vendor id %x\n", priv->vid);
+		// return -ENODEV;
+	// }
 
 	regmap_bulk_read(priv->regmap, IT6621_REG_DEV_ID_LOW, &val, 2);
 	priv->devid = le16_to_cpu(val);
-	if (priv->devid != IT6621_DEVICE_ID) {
-		dev_err(priv->dev, "invalid device id %x\n", priv->devid);
-		return -ENODEV;
-	}
+	// if (priv->devid != IT6621_DEVICE_ID) {
+		dev_err(priv->dev, "device id %x\n", priv->devid);
+		// return -ENODEV;
+	// }
 
 	regmap_read(priv->regmap, IT6621_REG_REV_ID, &val);
 	priv->revid = val;
 
-	if ((priv->revid != IT6621_REVISION_VARIANT_B0) &&
-	    (priv->revid != IT6621_REVISION_VARIANT_C0) &&
-	    (priv->revid != IT6621_REVISION_VARIANT_D0)) {
-		dev_err(priv->dev, "invalid revision id %x\n", priv->revid);
-		return -ENODEV;
-	}
+	// if ((priv->revid != IT6621_REVISION_VARIANT_B0) &&
+	//     (priv->revid != IT6621_REVISION_VARIANT_C0) &&
+	//     (priv->revid != IT6621_REVISION_VARIANT_D0)) {
+		dev_err(priv->dev, "revision id %x\n", priv->revid);
+		// return -ENODEV;
+	// }
 
 	return 0;
 }
